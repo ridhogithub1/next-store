@@ -1,0 +1,452 @@
+/* Mobile-First Optimized CSS for DoStore */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+}
+
+.App {
+  text-align: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  position: relative;
+}
+
+/* Simplified background - no complex overlays for mobile */
+.App::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 50% 20%, rgba(134, 142, 150, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.App-header {
+  padding: 20px 15px;
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.App-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #343a40;
+  margin-bottom: 20px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Mobile-first search input */
+.search-input {
+  width: 100%;
+  max-width: 100%;
+  padding: 12px 16px;
+  margin: 0 0 25px 0;
+  font-size: 16px; /* Prevents zoom on iOS */
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  color: #495057;
+  font-weight: 400;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #495057;
+  box-shadow: 0 4px 12px rgba(73, 80, 87, 0.15);
+  background: white;
+}
+
+.search-input::placeholder {
+  color: #6c757d;
+}
+
+/* Mobile-optimized product grid */
+.product-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 15px;
+  padding: 0 5px;
+}
+
+/* Simplified product cards for mobile */
+.product-card {
+  background: white;
+  border-radius: 12px;
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.product-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.product-card:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.product-card img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover img {
+  transform: scale(1.02);
+}
+
+.product-card h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #343a40;
+  margin: 8px 0 6px;
+  line-height: 1.3;
+  text-align: left;
+}
+
+.product-card p {
+  font-size: 16px;
+  font-weight: 700;
+  color: #28a745;
+  margin: 0;
+  text-align: left;
+}
+
+/* Order page mobile optimization */
+.order-container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.order-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #343a40;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Simplified form styles */
+.order-form {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  margin-bottom: 20px;
+}
+
+.form-input,
+.form-textarea {
+  width: 100%;
+  padding: 12px 16px;
+  margin-bottom: 15px;
+  font-size: 16px; /* Prevents zoom on iOS */
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  background: #f8f9fa;
+  transition: all 0.3s ease;
+  color: #495057;
+  font-weight: 400;
+}
+
+.form-textarea {
+  min-height: 80px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: #495057;
+  background: white;
+  box-shadow: 0 2px 8px rgba(73, 80, 87, 0.1);
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: #6c757d;
+  font-weight: 400;
+}
+
+/* Simplified payment section */
+.payment-section {
+  margin: 20px 0;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.payment-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #495057;
+  margin: 0 0 12px 0;
+  text-align: left;
+}
+
+.payment-option {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 8px;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+
+.payment-option:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.payment-option input[type="radio"] {
+  margin-right: 10px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.payment-option label {
+  font-size: 14px;
+  color: #495057;
+  cursor: pointer;
+  font-weight: 500;
+  flex: 1;
+  text-align: left;
+}
+
+/* Mobile-optimized total price */
+.total-price {
+  font-size: 20px;
+  font-weight: 700;
+  color: #28a745;
+  text-align: center;
+  padding: 15px;
+  margin: 15px 0;
+  background: rgba(40, 167, 69, 0.1);
+  border-radius: 8px;
+}
+
+/* Mobile-optimized order button */
+.order-button {
+  width: 100%;
+  padding: 16px 20px;
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.order-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(40, 167, 69, 0.4);
+}
+
+.order-button:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.order-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Tablet responsive (min-width: 768px) */
+@media (min-width: 768px) {
+  .App-header {
+    padding: 30px 20px;
+  }
+  
+  .App-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 25px;
+  }
+  
+  .search-input {
+    max-width: 500px;
+    padding: 14px 20px;
+    margin-bottom: 30px;
+  }
+  
+  .product-list {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 0 10px;
+  }
+  
+  .product-card {
+    padding: 16px;
+  }
+  
+  .product-card img {
+    height: 160px;
+  }
+  
+  .product-card h3 {
+    font-size: 16px;
+    margin: 12px 0 8px;
+  }
+  
+  .product-card p {
+    font-size: 18px;
+  }
+  
+  .order-container {
+    max-width: 600px;
+    padding: 0 20px;
+  }
+  
+  .order-title {
+    font-size: 2rem;
+  }
+  
+  .order-form {
+    padding: 25px;
+  }
+  
+  .form-input,
+  .form-textarea {
+    padding: 14px 18px;
+  }
+  
+  .payment-section {
+    padding: 20px;
+  }
+  
+  .total-price {
+    font-size: 24px;
+    padding: 20px;
+  }
+  
+  .order-button {
+    padding: 18px 24px;
+    font-size: 18px;
+  }
+}
+
+/* Desktop responsive (min-width: 1024px) */
+@media (min-width: 1024px) {
+  .App-header h1 {
+    font-size: 3rem;
+  }
+  
+  .product-list {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+  }
+  
+  .product-card img {
+    height: 200px;
+  }
+  
+  .product-card h3 {
+    font-size: 18px;
+  }
+  
+  .product-card p {
+    font-size: 20px;
+  }
+}
+
+/* Touch-friendly improvements */
+@media (pointer: coarse) {
+  .product-card {
+    min-height: 48px; /* Minimum touch target */
+  }
+  
+  .payment-option {
+    min-height: 44px;
+  }
+  
+  .order-button {
+    min-height: 48px;
+  }
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Focus styles for accessibility */
+*:focus {
+  outline: 2px solid #495057;
+  outline-offset: 2px;
+}
+
+/* Loading states */
+.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Empty state styling */
+.empty-state {
+  grid-column: 1 / -1;
+  padding: 40px 20px;
+  color: #6c757d;
+  font-size: 16px;
+  text-align: center;
+}
+
+.empty-state p:first-child {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.empty-state p:last-child {
+  font-size: 14px;
+  opacity: 0.7;
+}
