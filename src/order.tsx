@@ -1571,12 +1571,13 @@ import { staticProducts } from './produk';
 import { productReviews, Review } from './review';
 
 type Product = {
-  id: number;
+  _id: string;
   name: string;
   price: number;
-  images: string[];
   description?: string;
+  image: string;
 };
+
 
 // Star Rating Component
 function StarRating({ rating }: { rating: number }) {
@@ -1867,37 +1868,40 @@ function OrderPage() {
   const [paymentMethod, setPaymentMethod] = useState("COD");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  useEffect(() => {
-    console.log('🔍 OrderPage - useEffect triggered');
-    console.log('📍 Location state:', location.state);
-    console.log('🆔 Product ID from params:', productId);
-    
-    let foundProduct: Product | null = null;
+useEffect(() => {
+  const fetchProduct = async () => {
+    setLoading(true);
+    try {
+      let productData: Product | null = null;
 
-    if (location.state && typeof location.state === 'object' && 'id' in location.state) {
-      foundProduct = location.state as Product;
-      console.log('✅ Product found from location.state:', foundProduct);
-    } else if (productId) {
-      const id = parseInt(productId);
-      foundProduct = staticProducts.find(p => p.id === id) || null;
-      console.log('✅ Product found from staticProducts:', foundProduct);
-    }
+      // Jika product dikirim via navigate state
+      if (location.state && typeof location.state === "object" && "_id" in location.state) {
+        productData = location.state as Product;
+        console.log("✅ Product found from location.state:", productData);
+      } 
+      // Jika tidak, ambil dari backend berdasarkan productId
+      else if (productId) {
+        const res = await fetch(`https://admin-next-store-backend.vercel.app/api/admin/products/${productId}`);
+        const data = await res.json();
 
-    setProduct(foundProduct);
-    
-    if (foundProduct !== null) {
-      const productReviewsList = productReviews.filter(r => r.productId === foundProduct!.id);
-      console.log('⭐ Reviews loaded:', productReviewsList);
-      setReviews(productReviewsList);
-    }
-    
-    setLoading(false);
+        if (data.status === "success" && data.data) {
+          productData = data.data;
+          console.log("✅ Product fetched from backend:", productData);
+        } else {
+          console.error("❌ Gagal memuat produk dari API");
+        }
+      }
 
-    if (foundProduct !== null && !productId) {
-      console.log('🔄 Navigating to:', `/order/${foundProduct.id}`);
-      navigate(`/order/${foundProduct.id}`, { replace: true });
+      setProduct(productData);
+      setLoading(false);
+    } catch (err) {
+      console.error("❌ Error fetching product:", err);
+      setLoading(false);
     }
-  }, [productId, location.state, navigate]);
+  };
+
+  fetchProduct();
+}, [productId, location.state]);
 
   const totalHarga = (product?.price ?? 0) * jumlah;
 // Update bagian handleSubmit di order.tsx
@@ -1927,7 +1931,7 @@ const handleSubmit = async (e: React.FormEvent) => {
       alamat: alamat.trim(),
       telepon: telepon.trim(),
       produk: product.name,
-      productId: product.id,
+  productId: product._id,
       jumlah: jumlah,
       totalHarga: totalHarga,
       metodePembayaran: paymentMethod,
@@ -2005,83 +2009,6 @@ const handleSubmit = async (e: React.FormEvent) => {
     console.log('🏁 Form submission finished');
   }
 };
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-    
-  //   console.log('📝 Form submission started');
-    
-  //   if (!product) {
-  //     console.error('❌ Product not found!');
-  //     alert("❌ Data produk tidak ditemukan!");
-  //     return;
-  //   }
-
-  //   setIsSubmitting(true);
-
-  //   try {
-  //     const totalHarga = product.price * jumlah;
-
-  //     const orderData = {
-  //       nama: nama.trim(),
-  //       alamat: alamat.trim(),
-  //       telepon: telepon.trim(),
-  //       produk: product.name,
-  //       productId: product.id,
-  //       jumlah: jumlah,
-  //       totalHarga: totalHarga,
-  //       metodePembayaran: paymentMethod,
-  //       timestamp: new Date().toISOString()
-  //     };
-
-  //     console.log('📦 Order Data:', orderData);
-  //     console.log('📊 Order Data (formatted):', JSON.stringify(orderData, null, 2));
-
-  //     // Simpan ke Google Sheets
-  //     console.log('🚀 Sending to Google Sheets...');
-  //     const response = await fetch("https://script.google.com/macros/s/AKfycbyFTX7kiBl_8f6mHDZ_oVByx7fOhch56fUNgoU4JiKnnoyz5RYDX6ZzWgTz02gPl5HJ/exec", {
-  //       method: "POST",
-  //       mode: "no-cors",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(orderData)
-  //     });
-      
-  //     console.log('✅ Data sent to Google Sheets');
-  //     console.log('📡 Response:', response);
-
-  //     // Generate order ID
-  //     const orderId = Date.now().toString();
-  //     console.log('🔢 Generated Order ID:', orderId);
-
-  //     // Tampilkan alert sukses
-  //     alert("✅ Pesanan berhasil dikirim! Data telah tersimpan.");
-
-  //     // Reset form
-  //     console.log('🔄 Resetting form...');
-  //     setNama("");
-  //     setAlamat("");
-  //     setTelepon("");
-  //     setJumlah(1);
-  //     setPaymentMethod("COD");
-
-  //     // Navigate ke halaman order success
-  //     console.log('🔄 Navigating to order success page...');
-  //     navigate(`/ordersuccess/${orderId}`, {
-  //       state: { orderData }
-  //     });
-
-  //     console.log('✅ Order process completed successfully');
-
-  //   } catch (error) {
-  //     console.error("❌ Error details:", error);
-  //     console.error("❌ Error stack:", error instanceof Error ? error.stack : 'No stack trace');
-  //     alert("❌ Terjadi kesalahan saat mengirim data. Silakan coba lagi atau hubungi admin.");
-  //   } finally {
-  //     setIsSubmitting(false);
-  //     console.log('🏁 Form submission finished');
-  //   }
-  // };
 
   // Log form field changes
   useEffect(() => {
@@ -2206,7 +2133,7 @@ const handleSubmit = async (e: React.FormEvent) => {
           marginBottom: '25px',
           boxShadow: '0 4px 16px rgba(0, 0, 0, 0.08)'
         }}>
-          <ImageCarousel images={product.images} productName={product.name} />
+        <ImageCarousel images={[product.image]} productName={product.name} />
           
           <div style={{ textAlign: 'center', marginTop: '20px' }}>
             <h3 style={{ 
